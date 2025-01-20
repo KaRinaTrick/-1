@@ -1,0 +1,84 @@
+from random import randint
+
+
+class Animal:  # класс описывающий животных.
+    live = True
+    _DEGREE_OF_DANGER = 0
+    sound = None
+
+    def __init__(self, speed):
+        self.speed = speed
+        self._cords = [0, 0, 0]
+
+    def move(self, dx, dy, dz):
+        for i in self._cords:
+            x = self._cords[0] + dx * self.speed
+            y = self._cords[1] + dy * self.speed
+            z = self._cords[2] + dz * self.speed
+            if z > 0:
+                self._cords = [x, y, z]
+            else:
+                print("It's too deep, i can't dive :(")
+            break
+
+    def get_cords(self):
+        print(f' X: {self._cords[0]}, Y: {self._cords[1]}, Z: {self._cords[2]}')
+
+    def attack(self):
+        if self._DEGREE_OF_DANGER < 5:
+            print("Sorry, i'm peaceful :)")
+        elif self._DEGREE_OF_DANGER >= 5:
+            print("Be careful, i'm attacking you 0_0")
+
+    def speak(self):
+        print(str(self.sound))
+
+
+class Bird(Animal):  # класс описывающий птиц
+    beak = True
+
+    def lay_eggs(self):
+        print(f"Here are(is) {randint(1, 4)} eggs for you")
+
+
+class AquaticAnimal(Animal):  # класс описывающий плавающего животного
+    _DEGREE_OF_DANGER = 3
+
+    def __init__(self, speed,):
+        super().__init__(speed)
+        self._cords = [0, 0, 0]
+    
+    
+    def dive_in(self, dz):
+        while dz >= 0:
+            z =  self._cords[2] - abs(dz) * .5 * self.speed
+            self._cords[2] = z
+            break
+class PoisonousAnimal(Animal):  # класс описывающий ядовитых животных
+    _DEGREE_OF_DANGER = 8
+
+
+class Duckbill(PoisonousAnimal, Bird, AquaticAnimal):  # класс описывающий утконоса
+    sound = "Click-click-click"
+
+    def __init__(self, speed):
+        super().__init__(speed)
+
+    def speak(self):
+        super().speak()
+
+
+db = Duckbill(10)
+
+print(db.live)
+print(db.beak)
+
+db.speak()
+db.attack()
+
+db.move(1, 2, 3)
+db.get_cords()
+db.dive_in(6)
+db.get_cords()
+
+db.lay_eggs()
